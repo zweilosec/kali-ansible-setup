@@ -34,7 +34,7 @@ fi
 
 printf "[-] Running customization playbooks\n"
 
-ansible-playbook -i inventory --ask-become-pass -e "kali_user=$USER" kali-setup.yml
+ansible-playbook -i inventory --ask-become-pass -e "username=$USER" kali-setup.yml
 if [ $? -gt 0 ]; then
     printf "[!] Error occurred during playbook run.\n"
     exit 1    
