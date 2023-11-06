@@ -2,7 +2,7 @@
 
 This is my personal Kali Linux setup that I install as a base for my fresh Kali Linux images. There are no initial setup requirements, as the install script should take care of everything.  One caveat: this may not work if you ar using gnome instead of the default XFCE, as it does some customization to the latter.
 
-This repository is constantly being updated with new packages and configurations. It can be used as a template to set up your own prefered Kali Linux installation. 
+This repository is constantly being updated with new packages and configurations. It can be used as a template to set up your own prefered Kali Linux installation. Please create an issue if anything breaks, or if you think I should add something!
 
 ### Look and feel
 
@@ -85,7 +85,12 @@ Need to update this with all of the steps that Ansible will take in this build
 
 Thanks to the below projects and resources for making this all work!
 - https://github.com/IppSec/parrot-build
+- https://iptracej.github.io/posts/my-kali-ansible-automation/
+- https://github.com/dennis6400/kali-setup
+- https://github.com/iesplin/ansible-playbook-kali
 - https://github.com/Aegrah/kali_ansible_setup
+- https://github.com/hackedbyagirl/offensive-kali-ansible
+- https://github.com/cisagov/ansible-role-kali
 - https://stackoverflow.com/questions/5927489/looking-for-files-not-owned-by-a-specific-user
 - https://stackoverflow.com/questions/39580797/how-to-escape-backslash-and-double-quote-in-ansible-script-module
 - 
