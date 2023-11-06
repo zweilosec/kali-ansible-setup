@@ -1,7 +1,7 @@
 ---
 # Default file for configuring the Kali Linux operating system
 # Set as the user account that runs the ansible playbook
-user: "zweilos"
+user: "{{ username }}"
 
 # Burp Suite settings
 burpsuite_activate: true
