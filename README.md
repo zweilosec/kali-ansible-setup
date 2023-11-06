@@ -1,6 +1,8 @@
 # Kali Linux Ansible Setup
 
-This is my personal Kali Linux setup that I install as a base for my fresh Kali Linux images. There are no initial setup requirements, as the install script should take care of everything.  One caveat: this may not work if you ar using gnome instead of the default XFCE, as it does some customization to the latter.
+This is my personal Kali Linux setup that I install as a base for my fresh Kali Linux images. There are no initial setup requirements, as the install script should take care of everything.  Just clone this repository to your user's home directory and run `deploy.sh`.  
+
+One caveat: this may not work if you ar using gnome instead of the default XFCE, as it does some customization to the latter.
 
 This repository is constantly being updated with new packages and configurations. It can be used as a template to set up your own prefered Kali Linux installation. Please create an issue if anything breaks, or if you think I should add something!
 
@@ -15,12 +17,13 @@ A screenshot of the themed setup is shown below.
 
 To install, simply run the `deploy.sh` script on a clean install of Kali Linux (tested on 2023.3).  You will be prompted to enter your sudo password, which will then install Ansible and its prerequisites, then runs the ansible-playbook command. You will need to enter your sudo password one more time at this prompt to kick off the customization.  The script can take quite awhile to run, depending on how many packages need to be updated and your download speed.
 
-1. Run deploy.sh
-2. Enter your sudo password at the prompt
-3. Enter your "become" (sudo) password at the prompt
-4. Wait
-5. ?
-6. Profit!
+1. Clone this repository to your user's home directory (I run mine from the desktop)
+2. Run `deploy.sh`
+3. Enter your sudo password at the prompt
+4. Enter your "become" (sudo) password at the prompt
+5. Wait
+6. ?
+7. Profit!
 
 ### Post configuration
 
