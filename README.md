@@ -7,7 +7,7 @@ This repository is constantly being updated with new packages and configurations
 The Ansible script uses the powerlevel10k zsh theme in combination with the nord-tmux theme by arcticicestudio. The ls command is replaced by exa to get more color and detail in file listings. 
 A screenshot of the themed setup is shown below.
 
-![kali-style]()
+![kali-style](Kali Desktop.png)
 
 ### Installation
 
