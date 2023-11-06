@@ -1,0 +1,239 @@
+---
+# Default file for configuring the Kali Linux operating system
+# Set as the user account that runs the ansible playbook
+user: "zweilos"
+
+# Burp Suite settings
+burpsuite_activate: true
+burpsuite_cacert_path: "/usr/local/share/ca-certificates/BurpSuiteCA.der"
+#burpsuite_extras_dir: "/home/{{ user }}/BurpSuiteExtras"
+burpsuite_user: "{{ user }}"
+
+# Set the tasks that should be executed to true
+# 0-pre-configuration.yml
+pre_configuration: true
+
+# 1-packages.yml
+kali_packages: true
+
+# 2-tools.yml
+kali_tools: true
+
+# 3-configuration.yml
+kali_configuration: true
+
+# 4-post-configuration.yml
+post_configuration: true
+
+# Define the list of packages to install within 1-packages.yml
+packages:
+  - awscli
+  - azure-cli
+  - bloodhound
+  - cmake
+  - covenant-kbx
+  - curl
+  - dnsmap
+  - docker.io
+  - docker-compose
+  - eyewitness
+  - enum4linux
+  - exa
+  - exif
+  - exiftool
+  - flameshot
+  - ffuf
+  - fping
+  - gcc-multilib
+  - gdb
+  - gdbserver
+  - ghidra
+  - gobuster
+  - hashcat
+  - hexedit
+  - hydra
+  - jq
+  - libssl-dev
+  - libimage-exiftool-perl
+  - nbtscan-unixwiz
+  - neo4j
+  - net-tools
+  - nikto
+  - nmap
+  - openssh-server
+  - parallel
+  - payloadsallthethings
+  - pipx
+  - python3-pip
+  - python3-venv
+  - rlwrap
+  - seclists
+  - scite
+  - smbclient
+  - smbmap
+  - smtp-user-enum
+  - socat
+  - sqlmap
+  - sshuttle
+  - swaks
+  - tshark
+  - wfuzz
+  - whatweb
+  - whois
+  - wireshark
+  - xclip
+  - xsel
+  - xsltproc
+  - xz-utils
+  - zsh
+  - zsh-autosuggestions
+  - zsh-syntax-highlighting
+
+# Define the list of packages to install within 1-packages.yml
+python_pip_packages:
+  - bloodhound
+  - bs4
+  - capstone
+  - colorama
+  - cryptography
+  - impacket
+  - ldap3
+  - mitm6
+  - pipenv
+  - poetry
+  - pwntools
+  - pywal
+  - pyYAML
+  - requests
+  - roadrecon
+  - ropper
+  - setuptools
+  - setuptools_rust
+  - unicorn
+
+
+# Define the list of packages to install within 1-packages.yml
+ruby_gem_packages:
+  - winrm
+  - winrm-fs
+  - stringio
+  - evil-winrm
+
+# Define the list of packages to install within 2-tools.yml
+git_repos:
+# Privilege Escalation
+  - name: linenum
+    repo: https://github.com/rebootuser/LinEnum.git
+  - name: linux-exploit-suggester-1
+    repo: https://github.com/mzet-/linux-exploit-suggester.git
+  - name: linux-exploit-suggester-2
+    repo: https://github.com/jondonas/linux-exploit-suggester-2.git
+  - name: linux-smart-enumeration
+    repo: https://github.com/diego-treitos/linux-smart-enumeration.git
+  - name: just-another-windows-enum-script
+    repo: https://github.com/411Hall/JAWS.git
+  - name: watson
+    repo: https://github.com/rasta-mouse/Watson.git
+  - name: adpeas
+    repo: https://github.com/61106960/adPEAS.git
+
+# Other
+  - name: droopescan
+    repo: https://github.com/droope/droopescan.git
+  - name: joomscan
+    repo: https://github.com/OWASP/joomscan.git
+  - name: gittools
+    repo: https://github.com/internetwache/GitTools.git
+
+# Define the list of misc tools that should be installed
+misc_downloads:
+  - url: https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/pspy64
+    dest: /home/{{user}}/uploads/pspy64
+    mode: "0755"
+  - url: https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/pspy64s
+    dest: /home/{{user}}/uploads/pspy64s
+    mode: "0755"
+  - url: https://eternallybored.org/misc/netcat/netcat-win32-1.12.zip
+    dest: /home/{{user}}/uploads/nc.zip
+    mode: "0755"
+  - url: https://github.com/ohpe/juicy-potato/releases/download/v0.1/JuicyPotato.exe
+    dest: /home/{{user}}/uploads/JuicyPotato.exe
+    mode: "0755"
+  - url: https://download.sysinternals.com/files/PSTools.zip
+    dest: /home/{{user}}/uploads/pstools.zip
+    mode: "0755"
+  - url: https://github.com/ankh2054/windows-pentest/raw/master/Privelege/accesschk-2003-xp.exe
+    dest: /home/{{user}}/uploads/accesschk_xp.exe
+    mode: "0755"
+  - url: https://the.earth.li/~sgtatham/putty/latest/w64/plink.exe
+    dest: /home/{{user}}/uploads/plink.exe
+    mode: "0755"
+  - url: https://github.com/itm4n/PrintSpoofer/releases/download/v1.0/PrintSpoofer32.exe
+    dest: /home/{{user}}/uploads/printspoofer32.exe
+    mode: "0755"
+  - url: https://github.com/itm4n/PrintSpoofer/releases/download/v1.0/PrintSpoofer64.exe
+    dest: /home/{{user}}/uploads/printspoofer64.exe
+    mode: "0755"
+  - url: https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/linpeas.sh
+    dest: /home/{{user}}/uploads/linpeas.sh
+    mode: "0755"
+  - url: https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/winPEASany.exe
+    dest: /home/{{user}}/uploads/winpeas.exe
+    mode: "0755"
+  - url: https://github.com/andrew-d/static-binaries/raw/master/binaries/windows/x86/ncat.exe
+    dest: /home/{{user}}/uploads/ncat.exe
+    mode: "0755"
+
+# Define fonts to install
+fonts:
+  # MesloLGS NF
+  - src: fonts/MesloLGS NF Regular.ttf
+    dest: /home/{{ user }}/.fonts/MesloLGS NF Regular.ttf
+    mode: "0755"
+  - src: fonts/MesloLGS NF Bold.ttf
+    dest: /home/{{ user }}/.fonts/MesloLGS NF Bold.ttf
+    mode: "0755"
+  - src: fonts/MesloLGS NF Italic.ttf
+    dest: /home/{{ user }}/.fonts/MesloLGS NF Italic.ttf
+    mode: "0755"
+  - src: fonts/MesloLGS NF Bold Italic.ttf
+    dest: /home/{{ user }}/.fonts/MesloLGS NF Bold Italic.ttf
+    mode: "0755" 
+  # MesloLG M   
+
+# Extensions for VS Code
+vscode_extensions:
+  # Language extensions
+  - ms-python.python
+  - ms-python.vscode-pylance
+  - ms-vscode.cpptools
+  - ms-vscode.powershell
+  # Syntax Highlighters
+  - voidei.vscode-vimrc
+  # Markdown
+  - yzhang.markdown-all-in-one
+  - davidanson.vscode-markdownlint
+  - cweijan.vscode-office
+  # GitHub Integration
+  - github.vscode-pull-request-github
+  - ms-vscode.remote-repositories
+  - github.remotehub
+
+# XFCE settings
+xfce_settings:
+  - { channel: "xfce4-panel", property: "/plugins/plugin-11/show-labels", type: "bool", value: "true" }
+  - { channel: "xfce4-panel", property: "/plugins/plugin-11/grouping", type: "uint", value: "0" }
+  - { channel: "xfce4-panel", property: "/panels/panel-1/position", type: "string", value: "'p=8;x=99999;y=99999'" }
+  # - { channel: "xfce4-power-manager", property: "/xfce4-power-manager/blank-on-ac", type: "int", value: "30" }
+  # - { channel: "xfce4-power-manager", property: "/xfce4-power-manager/dpms-enabled", type: "bool", value: "true" }
+  # - { channel: "xfce4-power-manager", property: "/xfce4-power-manager/dpms-on-ac-off", type: "int", value: "0" }
+  # - { channel: "xfce4-power-manager", property: "/xfce4-power-manager/dpms-on-ac-sleep", type: "int", value: "0" }
+  # - { channel: "xfce4-power-manager", property: "/xfce4-power-manager/general-notification", type: "bool", value: "false" }
+  # - { channel: "xfce4-power-manager", property: "/xfce4-power-manager/inactivity-on-ac", type: "int", value: "14" }
+  # - { channel: "xfce4-power-manager", property: "/xfce4-power-manager/inactivity-sleep-mode-on-ac", type: "int", value: "1" }
+  # - { channel: "xfce4-power-manager", property: "/xfce4-power-manager/lock-screen-suspend-hibernate", type: "bool", value: "true" }
+  # - { channel: "xfce4-power-manager", property: "/xfce4-power-manager/logind-handle-lid-switch", type: "bool", value: "false" }
+  # - { channel: "xfce4-power-manager", property: "/xfce4-power-manager/power-button-action", type: "int", value: "4" }
+  # - { channel: "xfce4-power-manager", property: "/xfce4-power-manager/show-tray-icon", type: "bool", value: "false" }
+  # # - { channel: "xfwm4", property: "/general/vblank_mode", type: "string", value: "xpresent" }
+  # - { channel: "xfwm4", property: "/general/workspace_count", type: "int", value: "4" }

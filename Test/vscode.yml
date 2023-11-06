@@ -1,0 +1,25 @@
+---
+# This playbook installs VSCode Extensions from a list
+
+- hosts: localhost
+  tasks: 
+  - name: test
+    ansible.builtin.command: 
+      cmd: "code --user-data-dir /home/zweilos/.vscode --install-extension {{ item }}"
+      chdir: /usr/bin
+    loop: 
+      # Language extensions
+      - ms-python.python
+      - ms-python.vscode-pylance
+      - ms-vscode.cpptools
+      - ms-vscode.powershell
+      # Syntax Highlighters
+      - voidei.vscode-vimrc
+      # Markdown
+      - yzhang.markdown-all-in-one
+      - davidanson.vscode-markdownlint
+      - cweijan.vscode-office
+      # GitHub Integration
+      - github.vscode-pull-request-github
+      - ms-vscode.remote-repositories
+      - github.remotehub

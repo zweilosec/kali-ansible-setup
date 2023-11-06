@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  tasks: 
+    - name: Remove Oh My ZSH directory if exists
+      ansible.builtin.file:
+        path: /home/zweilos/.oh-my-zsh/
+        state: absent
+      
+    - name: Installing oh-my-zsh
+      ansible.builtin.shell: 
+        cmd: /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
+
+
+    

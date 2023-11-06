@@ -1,0 +1,32 @@
+---
+# Installing the required Kali Linux, Python, and Ruby packages
+# https://serverfault.com/questions/883314/show-updated-packages-with-ansible-package-management
+- name: Install Kali packages
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+  register: debian
+  #- debug:
+  #    msg: " {{ debian.stdout_lines }} "
+- name: List installed and updated packages
+  shell: grep -E "^$(date +%Y-%m-%d).+ (install|upgrade) " /var/log/dpkg.log |cut -d " " -f 3-5
+  register: result
+  when: debian.changed
+  # May have false positives if packages are updated multiple times on same day
+- name: Show output of updated/installed packages
+  debug: msg="{{ result.stdout_lines }}"
+  when: debian.changed
+
+- name: Install Python Pip Packages
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    state: latest
+    executable: pip3
+  loop: "{{ python_pip_packages }}"
+
+- name: Install Ruby Gem Packages
+  community.general.gem:
+    name: "{{ item }}"
+    state: latest
+    user_install: false
+  loop: "{{ ruby_gem_packages }}"

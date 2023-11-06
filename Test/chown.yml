@@ -1,0 +1,28 @@
+---
+# Recursively change owner of a folder
+
+- hosts: localhost
+  tasks: 
+  - name: list all files to change ownership
+    ansible.builtin.find:
+      path: "/home/zweilos"
+      recurse: true
+    register: folder_contents
+  - name: Change ownership of files
+    ansible.builtin.file: 
+      path: "{{ item.path }}"
+      owner: "zweilos"
+      group: "zweilos"
+    become: yes
+    become_method: sudo
+    ignore_errors: yes
+    # rejectattr is needed to only get the files that your user doesn't already own
+    # you can remove this, but it will process every single file in your home directory
+    loop: "{{ folder_contents.files | rejectattr('pw_name', 'equalto', 'zweilos') | list}}"
+#    notify: 
+#      - Restart service
+    when: 
+      - item.path is not search(exclude_files)
+    vars:
+      # This file gets locked when updating and needs reboot to clear
+      exclude_files: "/home/zweilos/.gvfs"

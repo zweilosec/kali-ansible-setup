@@ -1,0 +1,266 @@
+---
+# Metasploit
+- name: Enable Postgresql service
+  ignore_errors: yes
+  ansible.builtin.systemd:
+    name: postgresql.service
+    state: started
+    enabled: true
+
+- name: Check msfdb status
+  ignore_errors: yes
+  ansible.builtin.command: msfdb status
+  register: msfdb_status
+  changed_when: false
+
+- name: Initialize msfdb
+  ignore_errors: yes
+  ansible.builtin.command: msfdb init
+  when: "'No configuration file found' in msfdb_status.stdout"
+
+# OpenSSL
+- name: Configure OpenSSL
+  ansible.builtin.lineinfile:
+    path: /etc/ssl/openssl.cnf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - regexp: "^MinProtocol ="
+      line: "MinProtocol = None"
+    - regexp: "^CipherStrings ="
+      line: "CipherStrings = DEFAULT"
+
+# ZSH Theme
+
+# oh-my-zsh installation fails if this directory already exists
+- name: Remove Oh My ZSH directory(s) if exists
+  ansible.builtin.file: 
+    path: "/home/{{ user }}/.oh-my-zsh/"
+    state: absent
+
+- name: Installing oh-my-zsh for {{ user }}
+  ansible.builtin.shell: 
+    cmd: /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
+  become: true
+  become_user: "{{ user }}"
+
+## Install Icons
+- name: Ensure fonts directory exists
+  file:
+    path: "/home/{{ user }}/.fonts"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    state: directory
+
+- name: Install MesloLGS NF fonts
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0644
+  loop: "{{ fonts }}"
+
+- name: rebuild system font cache
+  ansible.builtin.shell: fc-cache -f -v
+  
+## zshhistory
+- name: Touch zshhistory
+  ansible.builtin.file:
+    state: touch
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    path: /home/{{user}}/.cache/zshhistory
+    
+## Install Powerlevel10k theme for oh-my-zsh
+- name: Git clone Powerlevel10k
+  git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: /home/{{ user }}/.oh-my-zsh/custom/themes/powerlevel10k
+    depth: 1
+    update: yes
+    force: yes
+
+- name: Configure .zshrc using template
+  ansible.builtin.template:
+    src: templates/home/kali/.zshrc.j2
+    dest: /home/{{ user }}/.zshrc
+    owner: "{{ user }}"
+    group: "{{ user }}"
+
+# - name: Echo powerlvl10k zsh theme to zshrc - User
+  # ansible.builtin.shell: echo 'source /home/{{user}}/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+  # become: true
+  # become_user: "{{ user }}"
+
+# - name: Echo powerlvl10k zsh theme to zshrc - Root
+  # ansible.builtin.shell: echo 'source /home/{{user}}/powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
+
+# Tmux
+- name: Configure .tmux.conf using template
+  ansible.builtin.template:
+    src: templates/home/kali/.tmux.conf.j2
+    dest: /home/{{ user }}/.tmux.conf
+    owner: "{{ user }}"
+    group: "{{ user }}"
+
+- name: Ensure .tmux directory exists
+  ansible.builtin.file:
+    path: "/home/{{ user }}/.tmux/"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    state: directory
+
+- name: Ensure tmux plugins directory exists
+  ansible.builtin.file:
+    path: "/home/{{ user }}/.tmux/plugins/"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    state: directory
+
+# Clone git TPM repo
+- name: clone git repositories, download files and create directory structure
+  block:
+  - name: Clone git repositories
+    ansible.builtin.git:
+      repo: "https://github.com/tmux-plugins/tpm.git"
+      dest: "/opt/tmp/tpm"
+      force: true
+
+# Copy TPM files to install location
+- name: Install TPM to handle tmux tmux-plugins
+  ansible.builtin.copy:
+    src: /opt/tmp/tpm/
+    dest: /home/{{ user }}/.tmux/plugins/tpm
+
+# Exa
+- name: Set Exa as ls alias - User
+  ansible.builtin.shell: echo "\nalias ls='/usr/bin/exa'" >> /home/{{user}}/.zshrc
+  become: true
+  become_user: "{{ user }}"
+
+- name: Set Exa as ls alias - Root
+  ansible.builtin.shell: echo "\nalias ls='/usr/bin/exa'" >> /root/.zshrc
+
+# Change directory ownerships
+- name: Recursively change ownership of the ~/powerlevel10k directory
+  ansible.builtin.file:
+    path: /home/{{ user }}/.oh-my-zsh/custom/themes/powerlevel10k
+    state: directory
+    recurse: yes
+    owner: "{{ user }}"
+    group: "{{ user }}"
+
+- name: Recursively change ownership of the /opt directory
+  ansible.builtin.file:
+    path: /opt
+    state: directory
+    recurse: yes
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    
+# Recursively change ownership of the ~/ directory
+# https://stackoverflow.com/questions/73607663/ansible-recursively-change-ownership-except-for-a-specific-folder
+- name: List all files in user home not owned by {{ user }}
+  command: "find /home/{{ user }} \\! -user {{ user }} -print"
+  register: folder_contents
+- name: Change ownership of files to {{ user }}
+  ansible.builtin.file: 
+    path: "{{ item }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  become: yes
+  become_method: sudo
+  ignore_errors: yes
+  # rejectattr is needed to only get the files that your user doesn't already own
+  # you can remove this, but it will process every single file in your home directory
+  loop: "{{ folder_contents.stdout_lines }}" 
+  when: 
+    - item is not search(exclude_files)
+  vars:
+    # This file gets locked when updating and needs reboot to clear
+    exclude_files: "/home/{{ user }}/.gvfs"
+
+# Burp suite setup
+- name: "Check if BurpSuiteCA.der exists"
+  stat:
+    path: /usr/local/share/ca-certificates/BurpSuiteCA.der
+  register: burp_cert
+  
+- name: "Copying Burp Script"
+  copy:
+    src: files/getburpcert.sh
+    dest: /tmp/getburpcert.sh
+    mode: 0744
+  when: burp_cert.stat.exists == False
+
+- name: "Executing bash script to Download CA Certificate"
+  shell:
+    /tmp/getburpcert.sh
+  when: burp_cert.stat.exists == False
+
+- name: "Copying CA Certificate to /usr/local/share/ca-certificates"
+  copy:
+    src: /tmp/cacert.der
+    dest: /usr/local/share/ca-certificates/BurpSuiteCA.der
+    owner: root
+    group: root
+    mode: 0644
+#  become: true
+#  become_method: sudo
+  when: burp_cert.stat.exists == False
+
+#- name: Create directory for Burp Suite extras
+#  ansible.builtin.file:
+#    path: "{{ burpsuite_extras_dir }}"
+#    state: directory
+#    mode: '0755'
+#  become: true
+#  become_method: sudo
+
+#- name: Download jar files
+#  ansible.builtin.get_url:
+#    url: "{{ item.value.url }}"
+#    dest: "{{ burpsuite_extras_dir }}/{{ item.value.jar }}"
+#    checksum: "{{ item.value.checksum }}"
+#    mode: '0644'
+#  become: true
+#  become_method: sudo
+#  loop: "{{ lookup('dict', burpsuite_extras_jars) }}"
+  
+#- name: Copy BurpSuite Community Config
+#  template:
+#    src: "templates/UserConfigCommunity.json.j2"
+#    dest: "/home/{{ ansible_user_id }}/.BurpSuite/UserConfigCommunity.json"
+
+# Firefox ESR
+# https://mozilla.github.io/policy-templates/
+- name: Deploy Firefox ESR policy
+  ansible.builtin.template:
+    src: templates/firefox/policies.json.j2
+    dest: /usr/share/firefox-esr/distribution/policies.json
+    owner: root
+    group: root
+    mode: 0644
+
+# XFCE settings - Doesn't seem to make changes - using shell command below instead
+#- name: Apply XFCE settings
+#  community.general.xfconf:
+#    channel: "{{ item.channel }}"
+#    property: "{{ item.property }}"
+#    value_type: "{{ item.type }}"
+#    value: "{{ item.value }}"
+#  loop: "{{ xfce_settings }}"
+
+- name: Apply XFCE settings
+  ansible.builtin.shell:
+    cmd: "xfconf-query -c {{ item.channel }} -p {{ item.property }} --type {{ item.type }} --set {{ item.value }}"
+  loop: "{{ xfce_settings }}"
+
+- name: Install VS Code extensions
+  ansible.builtin.command:
+    cmd: "code --user-data-dir /home/{{ user }}/.vscode --install-extension {{ item }}"
+    chdir: /usr/bin
+#  register: vscode_install_extension_cmd
+#  changed_when: "'successfully installed' in vscode_install_extension_cmd.stdout"
+  loop: "{{ vscode_extensions }}"

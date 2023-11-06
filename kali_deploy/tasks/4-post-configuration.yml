@@ -1,0 +1,26 @@
+---
+- name: Enable SSH service
+  ansible.builtin.service:
+    name: ssh
+    enabled: yes
+
+- name: Start docker service
+  ansible.builtin.service:
+    name: docker
+    state: started
+
+# Clean the system
+- name: Remove unnecessary packages
+  ansible.builtin.apt:
+    autoremove: true
+
+- name: Clean apt cache
+  ansible.builtin.apt:
+    autoclean: true
+    
+# Delete the /opt/tmp directory 
+- name: deleting the /opt/tmp directory
+  file:
+    state: absent
+    path: /opt/tmp/
+    #ignore_errors: yes

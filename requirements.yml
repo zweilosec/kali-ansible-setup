@@ -1,0 +1,3 @@
+---
+# install role for managing visual studio code extensions
+- src: gantsign.visual-studio-code-extensions
