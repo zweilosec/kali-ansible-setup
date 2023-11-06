@@ -162,7 +162,7 @@
 # Recursively change ownership of the ~/ directory
 # https://stackoverflow.com/questions/73607663/ansible-recursively-change-ownership-except-for-a-specific-folder
 - name: List all files in user home not owned by {{ user }}
-  command: "find /home/{{ user }} \\! -user {{ user }} -print"
+  shell: "find /home/{{ user }} \\! -user {{ user }} -print 2>&-"
   register: folder_contents
 - name: Change ownership of files to {{ user }}
   ansible.builtin.file: 
