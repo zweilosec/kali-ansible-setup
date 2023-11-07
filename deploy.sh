@@ -10,15 +10,14 @@ start=$SECONDS
 # Check if Ansible is installed.  If not, install it.  
 # May want to change installation method to "python3 -m pip install ansible"
 if ! command -v ansible >/dev/null; then
-    printf "\n[-] Installing Ansible\n"
+    printf "[-] Installing Ansible\n"
     sudo apt-get update -y && sudo apt-get install -y ansible
     if [ $? -gt 0 ]; then
-        printf "\n[!] Error occurred when attempting to install ansible package.\n"
+        printf "[!] Error occurred when attempting to install ansible package.\n"
         exit 1
     fi
 fi
 
-# Uncomment this section if you modify the code to require any external modules (after adding to requirements.yml)
 #printf "[-] Downloading required Ansible collections\n"
 #ansible-galaxy collection install --upgrade -r requirements.yml
 #if [ $? -gt 0 ]; then
@@ -26,7 +25,6 @@ fi
 #    exit 1
 #fi
 
-# Uncomment this section if you are using external roles (after adding to requirements.yml)
 #printf "[-] Downloading required roles\n"
 #ansible-galaxy role install --force -r requirements.yml
 #if [ $? -gt 0 ]; then
@@ -35,10 +33,9 @@ fi
 #fi
 
 printf "\n[-] Running customization playbooks\n"
-printf "[-] Please enter your sudo password at the "Become password" prompt\n"
+printf "[-] Please enter your sudo password: \n"
 
 ansible-playbook -i inventory --ask-become-pass -e "username=$USER" kali-setup.yml
-#This code checks for an exit code other than 0
 if [ $? -gt 0 ]; then
     printf "[!] Error occurred during playbook run.\n"
     exit 1    
