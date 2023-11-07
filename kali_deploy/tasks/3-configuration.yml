@@ -165,16 +165,16 @@
   #shell: "find /home/{{ user }} \\! -user {{ user }} -print 2>&-"
   shell: 
     # https://unix.stackexchange.com/questions/638372/why-does-find-still-try-to-access-gvfs-and-even-includes-it-in-the-output-de
-    cmd: "ls -aR ~/*(^UD)"
+    cmd: "printf '%s\n' **/*(D^U)"
     executable: "/usr/bin/zsh"
+    become: yes
+    become_user: "{{ user }}"
   register: folder_contents
 - name: Change ownership of files to {{ user }}
   ansible.builtin.file: 
     path: "{{ item }}"
     owner: "{{ user }}"
     group: "{{ user }}"
-  become: yes
-  become_method: sudo
   ignore_errors: yes
   # rejectattr is needed to only get the files that your user doesn't already own
   # you can remove this, but it will process every single file in your home directory
