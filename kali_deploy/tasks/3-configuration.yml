@@ -1,4 +1,7 @@
 ---
+
+# System Configurations
+
 # Metasploit
 - name: Enable Postgresql service
   ignore_errors: yes
@@ -6,6 +9,8 @@
     name: postgresql.service
     state: started
     enabled: true
+  become: true
+  become_method: sudo
 
 - name: Check msfdb status
   ignore_errors: yes
@@ -29,6 +34,10 @@
       line: "MinProtocol = None"
     - regexp: "^CipherStrings ="
       line: "CipherStrings = DEFAULT"
+  become: true
+  become_method: sudo
+
+# User Configuration - Migrate to separate file when this all works
 
 # ZSH Theme
 
@@ -40,7 +49,7 @@
 
 - name: Installing oh-my-zsh for {{ user }}
   ansible.builtin.shell: 
-    cmd: /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
+    cmd: '/bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended'
   become: true
   become_user: "{{ user }}"
 
@@ -63,6 +72,8 @@
 
 - name: rebuild system font cache
   ansible.builtin.shell: fc-cache -f -v
+  become: true
+  become_method: sudo
   
 ## zshhistory
 - name: Touch zshhistory
@@ -119,9 +130,9 @@
     state: directory
 
 # Clone git TPM repo
-- name: clone git repositories, download files and create directory structure
+- name: Install tmux plugin manager
   block:
-  - name: Clone git repositories
+  - name: Clone tmux TPM repository
     ansible.builtin.git:
       repo: "https://github.com/tmux-plugins/tpm.git"
       dest: "/opt/tmp/tpm"
@@ -141,15 +152,8 @@
 
 - name: Set Exa as ls alias - Root
   ansible.builtin.shell: echo "\nalias ls='/usr/bin/exa'" >> /root/.zshrc
-
-# Change directory ownerships
-- name: Recursively change ownership of the ~/powerlevel10k directory
-  ansible.builtin.file:
-    path: /home/{{ user }}/.oh-my-zsh/custom/themes/powerlevel10k
-    state: directory
-    recurse: yes
-    owner: "{{ user }}"
-    group: "{{ user }}"
+  become: true
+  become_method: sudo
 
 - name: Recursively change ownership of the /opt directory
   ansible.builtin.file:
@@ -158,38 +162,53 @@
     recurse: yes
     owner: "{{ user }}"
     group: "{{ user }}"
-    
-# Recursively change ownership of the ~/ directory
-# https://stackoverflow.com/questions/73607663/ansible-recursively-change-ownership-except-for-a-specific-folder
-- name: List all files in user home not owned by {{ user }}
-  #shell: "find /home/{{ user }} \\! -user {{ user }} -print 2>&-"
-  shell: 
-    # https://unix.stackexchange.com/questions/638372/why-does-find-still-try-to-access-gvfs-and-even-includes-it-in-the-output-de
-    cmd: "printf '%s\n' $PWD/**/*(D^U)"
-    executable: "/usr/bin/zsh"
-    become: yes
-    become_user: "{{ user }}"
-  register: folder_contents
-- name: Change ownership of files to {{ user }}
-  ansible.builtin.file: 
-    path: "{{ item }}"
-    owner: "{{ user }}"
-    group: "{{ user }}"
-  ignore_errors: yes
-  # rejectattr is needed to only get the files that your user doesn't already own
-  # you can remove this, but it will process every single file in your home directory
-  loop: "{{ folder_contents.stdout_lines }}" 
-  when: 
-    - item is not search(exclude_files)
-  vars:
-    # This file gets locked when updating and needs reboot to clear
-    exclude_files: "/home/{{ user }}/.gvfs"
+  become: true
+  become_method: sudo
+
+# This section should be superfluous now that I have removed the mindless over-root-ness    
+
+# # Change directory ownerships
+# - name: Recursively change ownership of the ~/powerlevel10k directory
+#   ansible.builtin.file:
+#     path: /home/{{ user }}/.oh-my-zsh/custom/themes/powerlevel10k
+#     state: directory
+#     recurse: yes
+#     owner: "{{ user }}"
+#     group: "{{ user }}"
+
+# # Recursively change ownership of the ~/ directory
+# # https://stackoverflow.com/questions/73607663/ansible-recursively-change-ownership-except-for-a-specific-folder
+# - name: List all files in user home not owned by {{ user }}
+#   shell: 
+#       # https://unix.stackexchange.com/questions/638372/why-does-find-still-try-to-access-gvfs-and-even-includes-it-in-the-output-de
+#       cmd: "printf '%s\n' $PWD/**/*(D^U)"
+#       #"ls -aR ~/*(^UD)"
+#       executable: "/usr/bin/zsh"
+#   register: folder_contents
+# - name: Change ownership of files to {{ user }}
+#   ansible.builtin.file: 
+#     path: "{{ item }}"
+#     owner: "{{ user }}"
+#     group: "{{ user }}"
+#   become: yes
+#   become_method: sudo
+#   ignore_errors: yes
+#   # rejectattr is needed to only get the files that your user doesn't already own
+#   # you can remove this, but it will process every single file in your home directory
+#   loop: "{{ folder_contents.stdout_lines }}" 
+#   when: 
+#     - item is not search(exclude_files)
+#   vars:
+#     # This file gets locked when updating and needs reboot to clear
+#     exclude_files: "/home/{{ user }}/.gvfs"
 
 # Burp suite setup
 - name: "Check if BurpSuiteCA.der exists"
   stat:
     path: /usr/local/share/ca-certificates/BurpSuiteCA.der
   register: burp_cert
+  become: true
+  become_method: sudo
   
 - name: "Copying Burp Script"
   copy:
@@ -197,11 +216,15 @@
     dest: /tmp/getburpcert.sh
     mode: 0744
   when: burp_cert.stat.exists == False
+  become: true
+  become_method: sudo
 
 - name: "Executing bash script to Download CA Certificate"
   shell:
     /tmp/getburpcert.sh
   when: burp_cert.stat.exists == False
+  become: true
+  become_method: sudo
 
 - name: "Copying CA Certificate to /usr/local/share/ca-certificates"
   copy:
@@ -210,8 +233,8 @@
     owner: root
     group: root
     mode: 0644
-#  become: true
-#  become_method: sudo
+  become: true
+  become_method: sudo
   when: burp_cert.stat.exists == False
 
 #- name: Create directory for Burp Suite extras
@@ -246,6 +269,8 @@
     owner: root
     group: root
     mode: 0644
+  become: true
+  become_method: sudo
 
 # XFCE settings - Doesn't seem to make changes - using shell command below instead
 #- name: Apply XFCE settings
@@ -260,6 +285,8 @@
   ansible.builtin.shell:
     cmd: "xfconf-query -c {{ item.channel }} -p {{ item.property }} --type {{ item.type }} --set {{ item.value }}"
   loop: "{{ xfce_settings }}"
+  become: true
+  become_user: "{{ user }}"
 
 - name: Install VS Code extensions
   ansible.builtin.command:
