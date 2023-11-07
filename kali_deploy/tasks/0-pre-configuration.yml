@@ -8,7 +8,7 @@
 #The regexp option tells the module what will be the content to replace.
 #The line option replaces the previously found content with the new content of your choice.
 #The backrefs option guarantees that if the regexp does not match, the file will be left unchanged.
-- name: replace line
+- name: replace line in /etc/resolv.conf to add 9.9.9.9 and 8.8.8.8 nameservers
   lineinfile: 
     path: /etc/resolv.conf 
     regexp: '^nameserver(.*)$' 
@@ -58,8 +58,8 @@
   file:
     path: "{{ item }}"
     state: directory
-    owner: root
-    group: root
+    owner: "{{ user }}"
+    group: "{{ user }}"
     mode: 0755
   loop:
     - /home/{{user}}/uploads
