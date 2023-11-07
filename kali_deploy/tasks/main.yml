@@ -12,7 +12,7 @@
 
 - name: Install all tools
   import_tasks: 2-tools.yml
-  become: true
+#  become: true
   when: kali_tools == true
 
 - name: Configure the system
