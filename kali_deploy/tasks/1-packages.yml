@@ -6,6 +6,8 @@
     name: "{{ packages }}"
     state: present
   register: debian
+  # become: yes
+  # become_method: sudo
   #- debug:
   #    msg: " {{ debian.stdout_lines }} "
 - name: List installed and updated packages
