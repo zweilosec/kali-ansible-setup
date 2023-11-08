@@ -94,6 +94,9 @@ Thanks to the below projects and resources for making this all work!
 - https://github.com/Aegrah/kali_ansible_setup
 - https://github.com/hackedbyagirl/offensive-kali-ansible
 - https://github.com/cisagov/ansible-role-kali
+- https://unix.stackexchange.com/questions/638372/why-does-find-still-try-to-access-gvfs-and-even-includes-it-in-the-output-de
 - https://stackoverflow.com/questions/5927489/looking-for-files-not-owned-by-a-specific-user
 - https://stackoverflow.com/questions/39580797/how-to-escape-backslash-and-double-quote-in-ansible-script-module
+- https://stackoverflow.com/questions/21646033/ansible-copy-file-if-not-exists
+- https://stackoverflow.com/questions/40788575/replace-a-line-in-a-config-file-with-ansible
 - 
