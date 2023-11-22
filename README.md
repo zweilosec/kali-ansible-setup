@@ -35,6 +35,8 @@ After configuring the terminal prompt, you can also launch a tmux session and in
 
 ### Possible issues
 
+Running the Gnome desktop gui or running Kali in Undercover mode instead of XFCE will cause the setup to break when it gets to the section where it configures XFCE.  There is no fix or workaround for this at the moment.
+
 The playbook clones different Github repositories and downloads several release files from dynamic GitHub pages. It's possible that one of the files is no longer available or that the location has changed. If it errors out, just change the URL's to the new correct file location. I added some additional error handling so it shouldn't break the script completely. Feel free to leave an issue if something does break.
 
 ## Customization list
