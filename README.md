@@ -51,9 +51,9 @@ Need to update this with all of the steps that Ansible takes in this build.  For
 - [x] ~/scripts
 - [x] ~/tools
 - [x] ~/uploads
-- [ ] ~/wordlists
-- [ ] ~/htb
-- [ ] ~/ctf
+- [x] ~/wordlists
+- [x] ~/htb
+- [x] ~/ctf
 
 ### Shell Customizations
 
@@ -80,11 +80,15 @@ Need to update this with all of the steps that Ansible takes in this build.  For
 
 ### create symlinks
 
-- [ ] ln -s `<seclists install location>` ~/wordlists/Seclists
-- [ ] ln -s /usr/share/wordlists ~/wordlists
-- [ ] ln -s `<impacket examples folder>` ~/tools/impacket
-- [ ] ln -s /usr/share/windows-binaries ~/uploads/windows
-- [ ] ln -s /usr/share/windows-resources ~/uploads/windows
+- [x] ln -s /usr/share/wordlists ~/wordlists
+- [x] ln -s /usr/share/doc/python3-impacket/examples ~/tools/impacket
+- [x] ln -s /usr/share/windows-resources ~/uploads/windows
+
+### Configure XFCE
+
+- [ ] Move taskbar to bottom of screen
+- [ ] Ungroup taskbar programs
+- [ ] Bring back labels to taskbar items
 
 ## References
 
