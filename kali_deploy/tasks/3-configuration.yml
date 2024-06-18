@@ -272,6 +272,25 @@
   become: true
   become_method: sudo
 
+# Add symlinks
+- name: Create symbolic link to wordlists folder
+  file:
+    src: "/usr/share/wordlists"
+    dest: "/home/{{user}}/wordlists"
+    state: link
+
+- name: Create symbolic link to impacket scripts folder
+  file:
+    src: "/usr/share/doc/python3-impacket/examples"
+    dest: "/home/{{user}}/tools/impacket"
+    state: link
+
+- name: Create symbolic link to windows binaries folder
+  file:
+    src: "/usr/share/windows-resources"
+    dest: "/home/{{user}}/uploads/windows"
+    state: link
+
 # XFCE settings - Doesn't seem to make changes - using shell command below instead
 #- name: Apply XFCE settings
 #  community.general.xfconf:
