@@ -25,6 +25,7 @@
     state: latest
     executable: pip3
   loop: "{{ python_pip_packages }}"
+  ignore_errors: true
 
 - name: Install Ruby Gem Packages
   community.general.gem:
