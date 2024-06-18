@@ -38,7 +38,7 @@ packages:
   - docker-compose
   - eyewitness
   - enum4linux
-  - exa
+  - eza
   - exif
   - exiftool
   - flameshot
