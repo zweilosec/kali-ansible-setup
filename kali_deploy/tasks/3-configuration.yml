@@ -307,6 +307,52 @@
   become: true
   become_user: "{{ user }}"
 
+# Configure Qterminal settings
+
+# Choose a color scheme that you like~
+- name: Update colorScheme in qterminal.ini
+  ansible.builtin.lineinfile:
+    path: /home/{{user}}/.config/qterminal.org/qterminal.ini
+    regexp: '^colorScheme=.*$'
+    line: 'colorScheme=Kali-Dark'
+    backrefs: yes
+    
+- name: Update Add Tab shortcut in qterminal.ini
+  ansible.builtin.lineinfile:
+    path: /home/{{user}}/.config/qterminal.org/qterminal.ini
+    regexp: '^Add%20Tab=.*$'
+    line: 'Add%20Tab=Alt+T'
+    backrefs: yes
+
+- name: Update Copy Selection shortcut in qterminal.ini
+  ansible.builtin.lineinfile:
+    path: /home/{{user}}/.config/qterminal.org/qterminal.ini
+    regexp: '^Copy%20Selection=.*$'
+    line: 'Copy%20Selection=Ctrl+X'
+    backrefs: yes
+
+- name: Update Paste Clipboard shortcut in qterminal.ini
+  ansible.builtin.lineinfile:
+    path: /home/{{user}}/.config/qterminal.org/qterminal.ini
+    regexp: '^Paste%20Clipboard=.*$'
+    line: 'Paste%20Clipboard=Ctrl+V'
+    backrefs: yes
+
+- name: Update Split Terminal Horizontally shortcut in qterminal.ini
+  ansible.builtin.lineinfile:
+    path: /home/{{user}}/.config/qterminal.org/qterminal.ini
+    regexp: '^Split%20Terminal%20Horizontally=.*$'
+    line: 'Split%20Terminal%20Horizontally=Ctrl+Shift+Right'
+    backrefs: yes
+
+- name: Update Split Terminal Vertically shortcut in qterminal.ini
+  ansible.builtin.lineinfile:
+    path: /home/{{user}}/.config/qterminal.org/qterminal.ini
+    regexp: '^Split%20Terminal%20Vertically=.*$'
+    line: 'Split%20Terminal%20Vertically=Ctrl+Shift+Up'
+    backrefs: yes
+
+# Install VS Code Extensions
 - name: Install VS Code extensions
   ansible.builtin.command:
     cmd: "code --user-data-dir /home/{{ user }}/.vscode --install-extension {{ item }}"
