@@ -1,0 +1,20 @@
+--- 
+
+- hosts: localhost
+  
+  tasks: 
+    - name: "Disable screen blanking (1 of 4)"
+      shell:
+        /usr/bin/xset s noblank
+
+    - name: "Disable screen blanking (2 of 4)"
+      shell:
+        /usr/bin/xset s off
+
+    - name: "Disable screen blanking (3 of 4)"
+      shell:
+        /usr/bin/xset dpms 0 0 0
+
+    - name: "Disable screen blanking (4 of 4)"
+      shell:
+        /usr/bin/xset -dpms
