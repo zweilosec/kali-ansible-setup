@@ -7,6 +7,7 @@
       - { channel: "xfce4-panel", property: "/plugins/plugin-11/show-labels", type: "bool", value: "true" }
       - { channel: "xfce4-panel", property: "/plugins/plugin-11/grouping", type: "uint", value: "0" }
       - { channel: "xfce4-panel", property: "/panels/panel-1/position", type: "string", value: "'p=8;x=99999;y=99999'" }
+      - { channel: "xfce4-power-manager", property: "/xfce4-power-manager/lock-screen-suspend-hibernate", type: "bool", value: "false" }
 
   tasks:
     - name: Apply XFCE settings
