@@ -1,5 +1,7 @@
 # Kali Linux Ansible Setup
 
+UPDATE: 2024-06-20 - Updated and tested working on Kali 2024.2.
+
 This is my personal Kali Linux setup that I install as a base for my fresh Kali Linux images. There are no initial setup requirements, as the install script should take care of everything.  Just clone this repository to your user's home directory and run `deploy.sh`.  
 
 One caveat: this may not work if you are using gnome instead of the default XFCE, as it does some customization to the latter.
