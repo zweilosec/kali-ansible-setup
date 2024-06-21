@@ -372,7 +372,8 @@
 # decompress rockyou so it can be used as a wordlist
 - name: Decompress rockyou.txt
   shell: gunzip /usr/share/wordlists/rockyou.txt.gz
-  become: yes
+  become: true
+  become_method: sudo
   
 # Install VS Code Extensions
 - name: Install VS Code extensions
