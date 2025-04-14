@@ -276,7 +276,7 @@
 - name: Create symbolic link to wordlists folder
   file:
     src: "/usr/share/wordlists"
-    dest: "/home/{{user}}/wordlists"
+    dest: "/home/{{user}}/wordlists/wordlists"
     state: link
 
 - name: Create symbolic link to impacket scripts folder
@@ -371,6 +371,7 @@
 
 # decompress rockyou so it can be used as a wordlist
 - name: Decompress rockyou.txt
+  ignore_errors: yes
   shell: gunzip /usr/share/wordlists/rockyou.txt.gz
   become: true
   become_method: sudo
@@ -383,3 +384,4 @@
 #  register: vscode_install_extension_cmd
 #  changed_when: "'successfully installed' in vscode_install_extension_cmd.stdout"
   loop: "{{ vscode_extensions }}"
+  ignore_errors: yes
