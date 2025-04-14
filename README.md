@@ -1,6 +1,7 @@
 # Kali Linux Ansible Setup
 
 UPDATE: 2024-06-20 - Updated and tested working on Kali 2024.2.
+UPDATE: 2025-04-14 - Updated and tested working on Kali 2024.4. Currently python package installation via pip is disabled, will switch to apt once I determine which useful packages were migrated.
 
 This is my personal Kali Linux setup that I install as a base for my fresh Kali Linux images. There are no initial setup requirements, as the install script should take care of everything.  Just clone this repository to your user's home directory and run `deploy.sh`.  
 
