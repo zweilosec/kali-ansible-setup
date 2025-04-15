@@ -90,27 +90,14 @@ packages:
   - zsh-syntax-highlighting
 
 # Define the list of packages to install within 1-packages.yml
-python_pip_packages:
+python_pipx_packages:
   - bloodhound
-  - bs4
-  - capstone
-  - colorama
-  - cryptography
   - impacket
-  - ldap3
   - mitm6
   - pipenv
   - poetry
   - pwntools
-  - pywal
-  - pyYAML
-  - requests
-  - roadrecon
   - ropper
-  - setuptools
-  - setuptools_rust
-  - unicorn
-
 
 # Define the list of packages to install within 1-packages.yml
 ruby_gem_packages:
