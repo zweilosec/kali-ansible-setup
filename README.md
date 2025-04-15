@@ -1,7 +1,7 @@
 # Kali Linux Ansible Setup
 
-UPDATE: 2024-06-20 - Updated and tested working on Kali 2024.2.
-UPDATE: 2025-04-14 - Updated and tested working on Kali 2024.4. Currently python package installation via pip is disabled, will switch to apt once I determine which useful packages were migrated.
+- UPDATE: 2024-06-20 - Updated and tested working on Kali 2024.2.
+- UPDATE: 2025-04-14 - Updated and tested working on Kali 2024.4. Use apt or pipx to install python packages from now on (or a virtual environment!)
 
 This is my personal Kali Linux setup that I install as a base for my fresh Kali Linux images. There are no initial setup requirements, as the install script should take care of everything.  Just clone this repository to your user's home directory and run `deploy.sh`.  
 
@@ -60,16 +60,20 @@ Need to update this with all of the steps that Ansible takes in this build.  For
 
 ### Shell Customizations
 
-- [x] Powerline fonts
-- [x] oh-my-zsh
-- [x] copy .zshrc file to ~/
-- [x] powerlevel10k
+- [x] Install Powerline fonts
+- [x] Install oh-my-zsh
+- [x] Copy .zshrc file to ~/
+- [x] Install powerlevel10k
+
+### User dotfiles
+- [ ] Install tmux config
+- [ ] Install .vimrc
 
 ### UX Customization
 - [ ] Check to ensure user is using xfce and not gnome (may or may not break since it customizes xfce)
 - [ ] Change desktop background
 
-### security
+### Security
 
 - [ ] Generate SSH keys
 - [ ] Create SSH user
@@ -81,17 +85,22 @@ Need to update this with all of the steps that Ansible takes in this build.  For
 - [ ] Pwndrop
 - [ ] _any suggestions?_
 
-### create symlinks
+### Create Symlinks
 
-- [x] ln -s /usr/share/wordlists ~/wordlists
+- [x] ln -s /usr/share/wordlists ~/wordlists/wordlists
 - [x] ln -s /usr/share/doc/python3-impacket/examples ~/tools/impacket
 - [x] ln -s /usr/share/windows-resources ~/uploads/windows
 
 ### Configure XFCE
 
-- [ ] Move taskbar to bottom of screen
-- [ ] Ungroup taskbar programs
-- [ ] Bring back labels to taskbar items
+- [x] Move taskbar to bottom of screen
+- [x] Ungroup taskbar programs
+- [x] Bring back labels to taskbar items
+
+### Set up burpsuite root CA
+- [x] Run headless burp to download root certificate
+- [x] Install root certificate in Firefox
+
 
 ## References
 
