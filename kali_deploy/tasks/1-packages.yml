@@ -19,12 +19,9 @@
   debug: msg="{{ result.stdout_lines }}"
   when: debian.changed
 
-- name: Install Python Pip Packages
-  ansible.builtin.pip:
-    name: "{{ item }}"
-    state: latest
-    executable: pip3
-  loop: "{{ python_pip_packages }}"
+- name: Install Python Pipx Packages
+  ansible.builtin.shell: pipx install "{{ item }}" --include-deps
+  loop: "{{ python_pipx_packages }}"
   ignore_errors: true
 
 - name: Install Ruby Gem Packages
