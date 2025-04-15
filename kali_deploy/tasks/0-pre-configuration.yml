@@ -31,9 +31,16 @@
     regexp: '^(deb\s+)http(://http.kali.org/kali.*)$'
     replace: '\1https\2'
 
+- shell: ls
+  register: apt_result
+
 - name: Update all packages to the latest version
   ansible.builtin.apt:
     upgrade: safe
+    register: apt_result
+
+- debug:
+  var: apt_result.stderr
 
 # Configure some update settings
 - name: Disable apt systemd timers
