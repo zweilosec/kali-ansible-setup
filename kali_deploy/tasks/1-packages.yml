@@ -24,6 +24,10 @@
   loop: "{{ python_pipx_packages }}"
   ignore_errors: true
 
+- name: Fix PATH of pipx packages
+  ansible.builtin.shell: pipx ensurepath
+  ignore_errors: true
+
 - name: Install Ruby Gem Packages
   community.general.gem:
     name: "{{ item }}"
