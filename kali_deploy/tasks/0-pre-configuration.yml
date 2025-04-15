@@ -37,10 +37,10 @@
 - name: Update all packages to the latest version
   ansible.builtin.apt:
     upgrade: safe
-    register: apt_result
+  register: apt_result
 
 - debug:
-  var: apt_result.stderr
+    var: apt_result.stdout_lines
 
 # Configure some update settings
 - name: Disable apt systemd timers
